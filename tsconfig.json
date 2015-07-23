@@ -1,0 +1,9 @@
+{
+	"version": "1.5.0-beta",
+	"compilerOptions": {
+		"target": "ES5",
+		"module": "commonjs",
+		"sourceMap": true,
+		"removeComments": true
+	}
+}
