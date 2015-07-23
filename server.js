@@ -30,58 +30,16 @@ logger.info("requires loaded");
 var port = process.env.port || 1333;
 var options = {
     target: {
-        host: 'maps.ngdc.noaa.gov'
+        host: 'pangea.de'
     },
     headers: {
-        host: 'maps.ngdc.noaa.gov'
+        host: 'pangea.de'
     }
 };
-var proxies = {
-    'ngdc': { site: 'maps.ngdc.noaa.gov' },
-    'pangea': { site: 'pangea.de' },
-    'utig': { site: 'www.ig.utexas.edu' }
-};
-for (var context in proxies) {
-    var url = proxies[context].site;
-    proxies[context].proxyServer = new httpProxy.createProxyServer({
-        target: {
-            host: url
-        },
-        headers: {
-            host: url
-        }
-    });
-}
+var proxyServer = new httpProxy.createProxyServer(options);
 var proxy = http.createServer(function (req, res) {
     logger.info("url: " + req.url);
-    var urlArray = req.url.split('/'), context = urlArray[1], subdomain = req.headers.host.split('.')[0];
-    logger.info("subdomain: " + req.headers.host.split('.')[0]);
-    if (proxies[context]) {
-        res.oldWriteHead = res.writeHead;
-        res.writeHead = function (statusCode, headers) {
-            res.setHeader('Set-Cookie', "proxy=" + context);
-            logger.info("header", 'start');
-            logger.info("header", res.getHeader('proxy'));
-            logger.info("header", 'end');
-            res.oldWriteHead(statusCode, headers);
-        };
-        urlArray.splice(0, 2);
-        var proxyUrl = "/" + urlArray.join('/');
-        logger.info("proxyUrl:" + proxyUrl);
-        req.url = proxyUrl;
-        proxies[context].proxyServer.web(req, res);
-    }
-    else if (proxies[res.getHeader('proxy')]) {
-        res.setHeader('proxyHeader', context);
-        proxies[context].proxyServer.web(req, res);
-    }
-    else if (proxies[subdomain]) {
-        logger.info("proxySubdomain: " + subdomain);
-        proxies[subdomain].proxyServer.web(req, res);
-    }
-    else {
-        proxies['pangea'].proxyServer.web(req, res);
-    }
+    proxyServer.web(req, res);
 }).listen(port);
 proxy.on("error", function () {
     logger.error("error!!!");

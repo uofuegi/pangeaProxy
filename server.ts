@@ -47,6 +47,7 @@ var options = {
     //}
 };
 // E.g. http://localhost:1333/advanced/kml.php?q=dsdp+39-355&amp;minlat=&amp;minlon=&amp;maxlat=&amp;maxlon=&amp;mindate=&amp;maxdate=&amp;env=All&amp;phpsessid=213834ebc6ee8df47829de0941339755&mode=gmap&count=125&ie=UTF-8
+// E.g. http://utig.azurewebsites.net/advanced/kml.php?q=dsdp+39-355&amp;minlat=&amp;minlon=&amp;maxlat=&amp;maxlon=&amp;mindate=&amp;maxdate=&amp;env=All&amp;phpsessid=213834ebc6ee8df47829de0941339755&mode=gmap&count=125&ie=UTF-8
 var proxyServer = new httpProxy.createProxyServer(options); 
 var proxy = http.createServer((req, res) => {
     logger.info("url: " + req.url);
