@@ -1,1 +1,1 @@
-# barengdcproxy
+# Simple Pangea Proxy
