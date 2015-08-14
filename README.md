@@ -1,2 +1,2 @@
 # Simple Pangea Proxy
-Testing Auto Deploy
+This Project Auto Deploys. Be Careful!
